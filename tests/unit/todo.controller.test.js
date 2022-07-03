@@ -7,18 +7,39 @@ const newTodo = require("../mock-data/new-todo.json");
 // predefined value
 TodoModel.create = jest.fn();
 
+// global scope
+let req, res, next;
+
+beforeEach(() => {
+  req = httpMocks.createRequest();
+  res = httpMocks.createResponse();
+  next = null;
+});
+
 describe("TodoController.createTodo", () => {
     it("should have a createTodo function", () => {
         expect(typeof TodoController.createTodo).toBe("function");
     });
 
   it("should call TodoModel.create", () => {
-    let req, res, next;
-    req = httpMocks.createRequest();
-    res = httpMocks.createResponse();
-    next = null;
     req.body = newTodo;
     TodoController.createTodo(req, res, next);
     expect(TodoModel.create).toBeCalledWith(newTodo);
   });  
+
+  it("should return 201 response code", () => {
+    req.body = newTodo;
+    TodoController.createTodo(req, res, next);
+    expect(res.statusCode).toBe(201);
+    // ensure response has been sent back
+    expect(res._isEndCalled()).toBeTruthy();
+  })
+
+  it("should retuen json body in response", () => {
+    req.body = newTodo;
+    TodoModel.create.mockReturnValue(newTodo);
+    TodoController.createTodo(req, res, next);
+    // same value but different object in memory so use toStrictEqual()
+    expect(res._getJSONData()).toStrictEqual(newTodo);
+  })
 });
