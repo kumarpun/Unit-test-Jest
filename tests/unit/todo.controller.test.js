@@ -27,18 +27,18 @@ describe("TodoController.createTodo", () => {
     expect(TodoModel.create).toBeCalledWith(newTodo);
   });  
 
-  it("should return 201 response code", () => {
+  it("should return 201 response code", async () => {
     req.body = newTodo;
-    TodoController.createTodo(req, res, next);
+   await TodoController.createTodo(req, res, next);
     expect(res.statusCode).toBe(201);
     // ensure response has been sent back
     expect(res._isEndCalled()).toBeTruthy();
   })
 
-  it("should retuen json body in response", () => {
+  it("should retuen json body in response", async () => {
     req.body = newTodo;
-    TodoModel.create.mockReturnValue(newTodo);
-    TodoController.createTodo(req, res, next);
+     TodoModel.create.mockReturnValue(newTodo);
+   await TodoController.createTodo(req, res, next);
     // same value but different object in memory so use toStrictEqual()
     expect(res._getJSONData()).toStrictEqual(newTodo);
   })
