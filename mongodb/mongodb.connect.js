@@ -6,7 +6,6 @@ async function connect() {
     ("mongodb+srv://kumar:rgjwvcaaa4AM7v9X@cluster0.uflrq.mongodb.net/?retryWrites=true&w=majority",
     { useNewUrlParser: true }
     );
-    console.log("connection success to database")
     } catch (err) {
         console.error("Error connecting to mongodb");
         console.error(err);
